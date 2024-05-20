@@ -1,6 +1,24 @@
 import tkinter as tk
 from tkinter import *
 from tkinter import ttk
+from entery_info import Entry
+import pandas as pd
+
+
+
+def submit_data():
+    print("Submit button clicked")
+    # Get the values from the input fields
+    name = entry_client.get()
+    address = entry_address.get()
+    date = entry_date.get()
+    gift = entry_gift.get()
+    
+    # Create an Entry object with the input data
+    new_entry = Entry(name, address, date, gift)
+    
+    # Update the CSV file with the new entry
+    new_entry.update_csv()
 
 
 
@@ -31,7 +49,7 @@ entry_date = ttk.Entry(master=input_frame)
 entry_gift = ttk.Entry(master=input_frame)
 
 # Create a button
-submit = ttk.Button(master=input_frame, text='Update Data')
+submit = ttk.Button(master=input_frame, text='Update Data', command=submit_data)
 
 # Arrange labels and entry fields in grid layout
 label_client.grid(row=0, column=0, padx=5, pady=5, sticky=tk.W)

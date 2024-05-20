@@ -1,4 +1,4 @@
-Name, Address, Date, Gift
+name, address, date, gift
 John, 212 Coral Drive, 2004/05/05, Chocolate
 Alice, 123 Elm Street, 2005/08/12, Flowers
 Bob, 456 Oak Avenue, 2006/03/20, Wine
@@ -9,3 +9,4 @@ David, 333 Birch Lane, 2010/12/25, Books
 Jennifer, 444 Walnut Street, 2011/06/18, Electronics
 Samantha, 555 Cherry Avenue, 2012/04/10, Artwork
 Matthew, 666 Willow Drive, 2013/10/05, Gadgets
+Henry Conner,121 coral drive,2001/09/01,book
