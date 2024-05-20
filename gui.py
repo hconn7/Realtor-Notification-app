@@ -7,17 +7,17 @@ import pandas as pd
 
 
 def submit_data():
-    print("Submit button clicked")
-    # Get the values from the input fields
+    
+  
     name = entry_client.get()
     address = entry_address.get()
     date = entry_date.get()
     gift = entry_gift.get()
     
-    # Create an Entry object with the input data
+    
     new_entry = Entry(name, address, date, gift)
     
-    # Update the CSV file with the new entry
+  
     new_entry.update_csv()
 
 
