@@ -1,7 +1,8 @@
 import tkinter as tk
 from tkinter import *
 from tkinter import ttk
-from entry_info import Entry
+from entry_info import Client
+from entry_info import update_csv
 
 def submit_data():
     name = entry_client.get()
@@ -9,9 +10,11 @@ def submit_data():
     date = entry_date.get()
     gift = entry_gift.get()
     
-    new_entry = Entry(name, address, date, gift)
-    new_entry.update_csv()
+    new_entry = Client(name, address, date, gift)
 
+    update_csv(new_entry)
+    
+   
 # Create the main window
 window = tk.Tk()
 window.title("Input Form")
