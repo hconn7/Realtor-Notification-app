@@ -10,9 +10,9 @@ def submit_data():
     date = entry_date.get()
     gift = entry_gift.get()
     
-    new_entry = Client(name, address, date, gift)
+    client = Client(name, address, date, gift)
 
-    update_csv(new_entry)
+    update_csv(client)
     
    
 # Create the main window
