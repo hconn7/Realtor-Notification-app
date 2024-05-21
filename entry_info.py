@@ -28,13 +28,11 @@ def save_to_csv(df: pd.DataFrame, file_path: str):
 
 def update_csv(client, filename='ClientData.csv'):
     try:
-        df = pd.read_csv(filename)  # Load existing data
-        new_data = pd.DataFrame([client.to_dict()])  # Convert client data to DataFrame
-        if df.empty:
-            df = new_data  # If DataFrame is empty, assign new_data directly
-        else:
-            df = pd.concat([df, new_data], ignore_index=True)  # Concatenate existing and new data
-        df.to_csv(filename, index=False)  # Save updated data
+        df = pd.read_csv(filename) 
+        new_data = pd.DataFrame([client.to_dict()])  
+        df = new_data  
+        df = pd.concat([df, new_data], ignore_index=True)  
+        df.to_csv(filename, index=False) 
         print("Entry added successfully to", filename)
     except Exception as e:
         print("Error:", e)
