@@ -3,6 +3,7 @@ from tkinter import *
 from tkinter import ttk
 from entry_info import Client
 from entry_info import update_csv
+from entry_info import send_anniversary_emails
 
 def submit_data():
     name = entry_client.get()
@@ -13,6 +14,7 @@ def submit_data():
     client = Client(name, address, date, gift)
 
     update_csv(client)
+    
     
    
 # Create the main window

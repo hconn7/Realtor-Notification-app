@@ -1,5 +1,11 @@
 from dataclasses import dataclass
 import pandas as pd
+import csv
+from emailing import send_email
+import datetime
+import sched
+import time
+
 
 @dataclass
 class Client:
@@ -25,7 +31,7 @@ def save_to_csv(df: pd.DataFrame, file_path: str):
 
 def update_csv(client, filename='ClientData.csv'):
     try:
-        # Try to read the existing CSV file
+   
         try:
             df = pd.read_csv(filename)
             print(f"Existing data read from {filename}:")
@@ -50,3 +56,42 @@ def update_csv(client, filename='ClientData.csv'):
         print("Entry added successfully to", filename)
     except Exception as e:
         print("Error:", e)
+csv_file = 'ClientData.csv'
+def send_anniversary_emails(csv_file):
+    global anniversary_sent
+    today = datetime.date.today()
+    print("Today's date:", today)
+
+    with open(csv_file, 'r') as file:
+        reader = csv.DictReader(file)
+        anniversary_sent = False
+        for row in reader:
+            # Extract data from the current row
+            name = row['name']
+            address = row['address']
+            date_str = row['date'].strip()  # Remove leading and trailing whitespace
+            gift = row['gift']
+
+            # Parse the date string
+            anniversary_date = datetime.datetime.strptime(date_str, '%Y-%m-%d').date()
+            print("Anniversary date for", name, ":", anniversary_date)
+
+            # Check if today is the anniversary date
+            if today.month == anniversary_date.month and today.day == anniversary_date.day:
+                recipient_email = 'henryconner10@gmail.com'  # Update with recipient's email address
+                print("Sending email to", recipient_email, "for", name)
+                sender_email = 'henryconner10@gmail.com'
+                sender_password = "kudl alca cyah jlnr"
+
+                subject = 'Anniversary Update'
+                body = f'Hello Shannon, your client, {name} has an anniversary today! The gift you gave them was: {gift}'
+                
+
+                send_email(sender_email, sender_password, recipient_email, subject, body)
+                print("Email sent successfully to", recipient_email)
+                anniversary_sent = True
+            else:
+                print("No anniversary today for", name)
+send_anniversary_emails(csv_file)
+
+          
