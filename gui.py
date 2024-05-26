@@ -1,36 +1,70 @@
 import tkinter as tk
 from tkinter import PhotoImage, ttk, messagebox
-import data_functions
+import callback_functions
+import pandas as pd
+from csv_methods import Client
 
 class ClientManagementSystem:
     def __init__(self, root):
         self.root = root
         self.root.title("Client Management System")
         self.root.geometry("600x400")
-        self.root.configure(bg="#ADD8E6")  # Set background color
         
-        # Set window icon
-        icon = PhotoImage(file='ICON.png')
-        self.root.iconphoto(True, icon)
+        # Load the background image
+        self.bg_image = tk.PhotoImage(file="bg_image.png")
+        
+        # Create a Canvas widget covering the entire window
+        self.canvas = tk.Canvas(root, width=600, height=400)
+        self.canvas.create_image(0, 0, anchor=tk.NW, image=self.bg_image)
+        self.canvas.place(relx=0.5, rely=0.5, anchor=tk.CENTER)  # Center the canvas
         
         # Create image label
-        image_path = "shannon_logo.png"  # Replace with your image path
-        self.image_photo = PhotoImage(file=image_path)
-        image_label = tk.Label(root, image=self.image_photo, bg="#ADD8E6")
-        image_label.pack(pady=10)
+        image_path = "shannon_logo.png" 
+        self.image_photo = tk.PhotoImage(file=image_path)
+        image_label = tk.Label(root, image=self.image_photo)
+        image_label.place(relx=0.5, rely=0.2, anchor=tk.CENTER)  # Position the label
         
         # Create buttons
-        tk.Button(root, text="List Clients", command=self.list_clients, bg="#008080", fg="black", font=("Helvetica", 12)).pack(pady=5)
-        tk.Button(root, text="New Client", command=self.open_submit_window, bg="#008080", fg="black", font=("Helvetica", 12)).pack(pady=5)
+        tk.Button(root, text="List Clients", command=self.display_client_list, relief="flat", font=("Helvetica", 16), borderwidth=0, highlightthickness=0, overrelief="flat").place(relx=0.5, rely=0.4, anchor=tk.CENTER)
+        tk.Button(root, text="New Client", command=self.open_submit_window, relief="flat", font=("Helvetica", 16), borderwidth=0, highlightthickness=0, overrelief="flat").place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+        
+        # Add a label
+        tk.Label(root, text="Welcome to the Client Management System",fg="White", bg="Black", font=("Helvetica", 16), borderwidth=0, highlightthickness=0).place(relx=0.5, rely=0.7, anchor=tk.CENTER)
+    
+    def get_client_list(self):
+        print("Fetching client list from CSV file")
+        client_list = []
+        try:
+            df = pd.read_csv('ClientData.csv')
+            for _, row in df.iterrows():
+                client = Client(name=row['name'], address=row['address'], date=row['date'], gift=row['gift'])
+                client_list.append(client)
+            return client_list
+        except FileNotFoundError:
+            messagebox.showerror("Error", "CSV file not found.")
+            return []
+
+    def display_client_list(self):
+        client_list = self.get_client_list()
+        if client_list:
+            list_window = tk.Toplevel(self.root)
+            list_window.title("List of Clients")
+
+            frame = ttk.Frame(list_window)
+            frame.pack(fill="both", expand=True)
+
+            text = tk.Text(frame, wrap="word", font=("Helvetica", 12), height=40)
+            text.pack(fill="both", expand=True, padx=10, pady=10)
+
+            text.insert(tk.END, "List of Clients:\n\n")
+            for client in client_list:
+                text.insert(tk.END, f"- {client.name}\n   Address: {client.address}\n   Date: {client.date}\n   Gift: {client.gift}\n\n")
+
+            scrollbar = ttk.Scrollbar(frame, orient="vertical", command=text.yview)
+            scrollbar.pack(side="right", fill="y")
+            text.config(yscrollcommand=scrollbar.set)
 
 
-    def list_clients(self):
-        client_list = data_functions.list_clients()
-        list_window = tk.Toplevel(self.root)
-        list_window.title("List of Clients")
-        text = tk.Text(list_window)
-        text.pack()
-        text.insert(tk.END, client_list)
 
     def open_submit_window(self):
         submit_window = tk.Toplevel(self.root)
@@ -61,9 +95,6 @@ class ClientManagementSystem:
         self.entry_address.grid(row=1, column=1, padx=5, pady=5, sticky=tk.W)
         self.entry_date.grid(row=2, column=1, padx=5, pady=5, sticky=tk.W)
         self.entry_gift.grid(row=3, column=1, padx=5, pady=5, sticky=tk.W)
-
-        submit.grid(row=4, columnspan=2, pady=10)
-
     def submit_data(self):
         name = self.entry_client.get()
         address = self.entry_address.get()
@@ -71,7 +102,7 @@ class ClientManagementSystem:
         gift = self.entry_gift.get()
         
         try:
-            message = data_functions.submit_data(name, address, date, gift)
+            message = callback_functions.submit_data(name, address, date, gift)
             messagebox.showinfo("Success", message)
             self.entry_client.delete(0, tk.END)
             self.entry_address.delete(0, tk.END)
@@ -80,20 +111,5 @@ class ClientManagementSystem:
         except ValueError as e:
             messagebox.showerror("Error", str(e))
 
-# Main window
-root = tk.Tk()
-root.geometry("600x400")
 
-root.configure(bg="#ADD8E6")
-
-
-
-
-
-# Pack the label to display it in the window
-
-
-
-
-app = ClientManagementSystem(root)
-root.mainloop()
+    

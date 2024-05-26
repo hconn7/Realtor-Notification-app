@@ -2,6 +2,10 @@ from dataclasses import dataclass
 import pandas as pd
 from emailing import send_email
 import datetime
+import os
+from tkinter import messagebox
+import tkinter as tk
+from tkinter import PhotoImage, ttk, messagebox
 
 @dataclass
 class Client:
@@ -9,6 +13,7 @@ class Client:
     address: str
     date: str
     gift: str
+
 
     def to_dict(self):
         return {'name': self.name, 'address': self.address, 'date': self.date, 'gift': self.gift}
@@ -48,9 +53,10 @@ def send_anniversary_emails(csv_file):
             anniversary_date = datetime.datetime.strptime(date_str, '%Y-%m-%d').date()
 
             if today.month == anniversary_date.month and today.day == anniversary_date.day:
-                recipient_email = 'recipient@example.com'
-                sender_email = 'sender@example.com'
-                sender_password = "yourpassword"
+                recipient_email = 'henryconner10@gmail.com'
+                sender_email = os.getenv("SENDER_EMAIL")
+                sender_password = os.getenv('SENDER_PASSWORD') 
+
 
                 subject = 'Anniversary Update'
                 body = f'Hello, your client {name} has an anniversary today! The gift you gave them was: {gift}'

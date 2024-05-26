@@ -1,5 +1,5 @@
 import pandas as pd
-from entry_info import Client
+from csv_methods import Client
 
 csv = "ClientData.csv"
 
@@ -15,6 +15,6 @@ def submit_data(name, address, date, gift):
     if len(date) != 10:
         raise ValueError("Please enter in the correct format: YYYY-MM-DD")
     
-    from entry_info import update_csv  # Local import to avoid circular import at the module level
+    from csv_methods import update_csv  # Local import to avoid circular import at the module level
     update_csv(client)
     return "Client data submitted successfully!"

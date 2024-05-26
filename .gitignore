@@ -2,6 +2,7 @@
 *.csv
 .DS_Store
 env/
+.env
 
 # python cache
 __pycache__

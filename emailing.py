@@ -4,24 +4,25 @@ import smtplib
 
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
+SENDER_EMAIL = os.getenv('SENDER_EMAIL')
+SENDER_PASSWORD = os.getenv('SENDER_PASSWORD')
 
-
-import sched
-import time
 
 
 csv_file = "ClientData.csv"
 
-sender_password = "kudl alca cyah jlnr"
-sender_email = "henryconner10@gmail.com"
 reciever_email = "henryconner10@gmail.com"
 
 def send_email(sender_email, sender_password, recipient_email, subject, body):
     # Setup the email message
     message = MIMEMultipart()
-    message['From'] = sender_email
+    message['From'] = SENDER_EMAIL
     message['To'] = recipient_email
     message['Subject'] = subject
     message.attach(MIMEText(body, 'plain'))
@@ -29,7 +30,7 @@ def send_email(sender_email, sender_password, recipient_email, subject, body):
     # Connect to the SMTP server
     server = smtplib.SMTP('smtp.gmail.com', 587)  
     server.starttls()
-
+    
     # Login to the SMTP server
     server.login(sender_email, sender_password)
 
