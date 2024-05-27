@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import PhotoImage, ttk, messagebox
+
 import callback_functions
 import pandas as pd
 from csv_methods import Client
@@ -11,25 +12,26 @@ class ClientManagementSystem:
         self.root.geometry("600x400")
         
         # Load the background image
-        self.bg_image = tk.PhotoImage(file="bg_image.png")
+        self.bg_image = tk.PhotoImage(file="images/bg_image.png")
         
         # Create a Canvas widget covering the entire window
         self.canvas = tk.Canvas(root, width=600, height=400)
         self.canvas.create_image(0, 0, anchor=tk.NW, image=self.bg_image)
         self.canvas.place(relx=0.5, rely=0.5, anchor=tk.CENTER)  # Center the canvas
         
-        # Create image label
-        image_path = "shannon_logo.png" 
+        image_path = "images/LOGOGO.png" 
         self.image_photo = tk.PhotoImage(file=image_path)
-        image_label = tk.Label(root, image=self.image_photo)
-        image_label.place(relx=0.5, rely=0.2, anchor=tk.CENTER)  # Position the label
+
+# Place the image on the canvas
+        self.canvas.create_image(300, 80, anchor=tk.CENTER, image=self.image_photo)
+   
         
         # Create buttons
-        tk.Button(root, text="List Clients", command=self.display_client_list, relief="flat", font=("Helvetica", 16), borderwidth=0, highlightthickness=0, overrelief="flat").place(relx=0.5, rely=0.4, anchor=tk.CENTER)
-        tk.Button(root, text="New Client", command=self.open_submit_window, relief="flat", font=("Helvetica", 16), borderwidth=0, highlightthickness=0, overrelief="flat").place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+        tk.Button(root, text="List Clients", command=self.display_client_list, relief="flat", padx=10,pady=5, font=("Helvetica", 16), borderwidth=0, highlightthickness=0, overrelief="flat").place(relx=0.5, rely=0.4, anchor=tk.CENTER)
+        tk.Button(root, text="New Client", command=self.open_submit_window, relief="flat",padx=10, pady=5, font=("Helvetica", 16), borderwidth=0, highlightthickness=0, overrelief="flat").place(relx=0.5, rely=0.5, anchor=tk.CENTER)
         
         # Add a label
-        tk.Label(root, text="Welcome to the Client Management System",fg="White", bg="Black", font=("Helvetica", 16), borderwidth=0, highlightthickness=0).place(relx=0.5, rely=0.7, anchor=tk.CENTER)
+        
     
     def get_client_list(self):
         print("Fetching client list from CSV file")
@@ -83,8 +85,8 @@ class ClientManagementSystem:
         self.entry_date = ttk.Entry(master=input_frame)
         self.entry_gift = ttk.Entry(master=input_frame)
 
-        submit = ttk.Button(master=input_frame, text='Update Data', 
-                            command=self.submit_data)
+        submit = ttk.Button(master=input_frame, text='Update Data', command=self.submit_data)
+        submit.grid(row=4, column=0, columnspan=2, padx=5, pady=5)
 
         label_client.grid(row=0, column=0, padx=5, pady=5, sticky=tk.W)
         label_address.grid(row=1, column=0, padx=5, pady=5, sticky=tk.W)
@@ -95,6 +97,7 @@ class ClientManagementSystem:
         self.entry_address.grid(row=1, column=1, padx=5, pady=5, sticky=tk.W)
         self.entry_date.grid(row=2, column=1, padx=5, pady=5, sticky=tk.W)
         self.entry_gift.grid(row=3, column=1, padx=5, pady=5, sticky=tk.W)
+        
     def submit_data(self):
         name = self.entry_client.get()
         address = self.entry_address.get()

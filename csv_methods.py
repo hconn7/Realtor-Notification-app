@@ -48,20 +48,33 @@ def send_anniversary_emails(csv_file):
         reader = pd.read_csv(file)
         for _, row in reader.iterrows():
             name = row['name']
-            date_str = row['date'].strip()
-            gift = row['gift']
-            anniversary_date = datetime.datetime.strptime(date_str, '%Y-%m-%d').date()
+            date_value = row['date']
+
+            # Check if the date value is a string, if not, handle it accordingly
+            if isinstance(date_value, str):
+                date_str = date_value.strip()
+            else:
+                # Handle missing or invalid date values
+                print(f"Skipping row for {name}: Invalid or missing date value")
+                continue
+
+            # Proceed with processing if date string is valid
+            try:
+                anniversary_date = datetime.datetime.strptime(date_str, '%Y-%m-%d').date()
+            except ValueError:
+                print(f"Skipping row for {name}: Invalid date format")
+                continue
 
             if today.month == anniversary_date.month and today.day == anniversary_date.day:
                 recipient_email = 'henryconner10@gmail.com'
                 sender_email = os.getenv("SENDER_EMAIL")
                 sender_password = os.getenv('SENDER_PASSWORD') 
 
-
                 subject = 'Anniversary Update'
                 body = f'Hello, your client {name} has an anniversary today! The gift you gave them was: {gift}'
                 
                 send_email(sender_email, sender_password, recipient_email, subject, body)
                 print(f"Email sent to {recipient_email} for {name}")
+
 
 send_anniversary_emails(csv_file)
